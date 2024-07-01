@@ -54,7 +54,7 @@ cd $HOME/workspaces
 
 # Clone remaining repos
 for repo in ${ADDITIONAL_REPOS}; do
-  git clone https://github.com/${repo}.git
+  git clone https://github.com/${repo}.git >> $HOME/clone_${repo}.log 2>&1
 
 # Install neovim
 #NVIM_VERSION=0.7.0
