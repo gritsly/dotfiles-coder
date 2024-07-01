@@ -49,6 +49,13 @@ cp $HOME/dotfiles.codespaces/myRubbyRussell.zsh-theme $HOME/.oh-my-zsh/themes/
 # Make zsh the default shell
 sudo chsh -s $(which zsh) $USER
 
+# Do the rest of the tasks from workspaces dir
+cd $HOME/workspaces
+
+# Clone remaining repos
+for repo in ${ADDITIONAL_REPOS}; do
+  git clone https://github.com/${repo}.git
+
 # Install neovim
 #NVIM_VERSION=0.7.0
 #sudo apt-get install -y libfuse2
