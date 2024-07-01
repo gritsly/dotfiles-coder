@@ -26,19 +26,6 @@ mkdir -p $HOME/bin
 # Make passwordless sudo work
 #export SUDO_ASKPASS=/bin/true
 
-# A bit of a hack
-mv .gitconfig .gitconfig.private
-mv .bashrc .bashrc.dist
-$HOME/.dotfiles/bin/dotfiles.symlink install
-
-# I'd like to use fish, please
-#sudo apt-get install -y fish
-#sudo chsh -s /usr/bin/fish $USER
-
-# Install fzf
-FZF_VERSION=0.30.0
-curl -L https://github.com/junegunn/fzf/releases/download/${FZF_VERSION}/fzf-${FZF_VERSION}-linux_amd64.tar.gz | tar xzC $HOME/bin
-
 # Install zsh
 sudo apt install -y zsh
 
@@ -50,6 +37,20 @@ cp $HOME/.dotfiles.codespaces/zsh/myRobbyRussell.zsh-theme $HOME/.oh-my-zsh/them
 
 # Make zsh the default shell
 sudo chsh -s $(which zsh) $USER
+
+# A bit of a hack
+mv .gitconfig .gitconfig.private
+mv .bashrc .bashrc.dist
+mv .zshrc .zshrc.dist
+$HOME/.dotfiles/bin/dotfiles.symlink install
+
+# I'd like to use fish, please
+#sudo apt-get install -y fish
+#sudo chsh -s /usr/bin/fish $USER
+
+# Install fzf
+FZF_VERSION=0.30.0
+curl -L https://github.com/junegunn/fzf/releases/download/${FZF_VERSION}/fzf-${FZF_VERSION}-linux_amd64.tar.gz | tar xzC $HOME/bin
 
 # Do the rest of the tasks from workspaces dir
 cd /workspaces
