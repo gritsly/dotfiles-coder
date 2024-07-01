@@ -14,6 +14,8 @@ echo >&2 "====================================================================="
 # Install the dotfiles I want
 cp -r dotfiles.codespaces $HOME/.dotfiles.codespaces
 git clone https://github.com/${GITHUB_USER}/dotfiles.git $HOME/.dotfiles
+cd $HOME/.dotfiles
+git pull
 
 # Do the rest of the tasks from the home dir
 cd $HOME
@@ -44,13 +46,15 @@ sudo apt install -y zsh
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 # Copy myRubbyRussell.zsh-theme to the themes directory
-cp $HOME/zsh/myRubbyRussell.zsh-theme $HOME/.oh-my-zsh/themes/
+cp $HOME/.dotfiles.codespaces/zsh/myRubbyRussell.zsh-theme $HOME/.oh-my-zsh/themes/
 
 # Make zsh the default shell
 sudo chsh -s $(which zsh) $USER
 
 # Do the rest of the tasks from workspaces dir
 cd /workspaces
+
+printf "Cloning additional repos: %s\n" "${ADDITIONAL_REPOS}"
 
 # Clone remaining repos
 for repo in ${ADDITIONAL_REPOS}; do
