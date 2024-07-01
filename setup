@@ -1,0 +1,68 @@
+#!/bin/sh
+
+if [ -z "$USER" ]; then
+    USER=$(id -un)
+fi
+
+echo >&2 "====================================================================="
+echo >&2 " Setting up codespaces environment"
+echo >&2 ""
+echo >&2 " USER        $USER"
+echo >&2 " HOME        $HOME"
+echo >&2 "====================================================================="
+
+# Install the dotfiles I want
+cp -r dotfiles.codespaces $HOME/.dotfiles.codespaces
+git clone https://github.com/${GITHUB_USER}/dotfiles.git $HOME/.dotfiles
+
+# Do the rest of the tasks from the home dir
+cd $HOME
+
+# create bindir
+mkdir -p $HOME/bin
+
+# Make passwordless sudo work
+#export SUDO_ASKPASS=/bin/true
+
+# A bit of a hack
+mv .gitconfig .gitconfig.private
+mv .bashrc .bashrc.dist
+$HOME/.dotfiles/bin/dotfiles.symlink install
+
+# I'd like to use fish, please
+#sudo apt-get install -y fish
+#sudo chsh -s /usr/bin/fish $USER
+
+# Install fzf
+FZF_VERSION=0.30.0
+curl -L https://github.com/junegunn/fzf/releases/download/${FZF_VERSION}/fzf-${FZF_VERSION}-linux_amd64.tar.gz | tar xzC $HOME/bin
+
+# Install neovim
+#NVIM_VERSION=0.7.0
+#sudo apt-get install -y libfuse2
+#curl -L -o $HOME/bin/nvim https://github.com/neovim/neovim/releases/download/v${NVIM_VERSION}/nvim.appimage
+#chmod a+x $HOME/bin/nvim
+
+# Install neovim
+if ! [ -d "/opt/nvim" ] ; then
+  curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
+  sudo rm -rf /opt/nvim
+  sudo tar -C /opt -xzf nvim-linux64.tar.gz
+  sudo mv /opt/nvim-linux64 /opt/nvim
+  rm -fr nvim-linux64.tar.gz
+fi
+
+PATH=${PATH}:/opt/nvim/bin/
+
+# Start tailscale
+# moved to the rpcpool/rpcpool
+#if [ -n "$TAILSCALE_KEY" ]; then
+#  echo "TAILSCALE_KEY is set automatically connecting to tailscale"
+  # check if tailscale command exists or not
+#    if command -v tailscale &> /dev/null
+#    then
+#         sudo tailscale up --accept-routes --ssh --authkey $TAILSCALE_KEY --operator codespace
+#    fi
+#else
+#  echo >&2 "No authkey specified. Set up tailscale by running tailscale up --accept-routes --ssh"
+#fi
