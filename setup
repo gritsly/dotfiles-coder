@@ -46,6 +46,9 @@ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.
 # Copy myRubbyRussell.zsh-theme to the themes directory
 cp $HOME/dotfiles.codespaces/myRubbyRussell.zsh-theme $HOME/.oh-my-zsh/themes/
 
+# Make zsh the default shell
+sudo chsh -s $(which zsh) $USER
+
 # Install neovim
 #NVIM_VERSION=0.7.0
 #sudo apt-get install -y libfuse2
