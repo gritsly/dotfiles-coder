@@ -46,7 +46,7 @@ sudo apt install -y zsh
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 # Copy myRubbyRussell.zsh-theme to the themes directory
-cp $HOME/.dotfiles.codespaces/zsh/myRubbyRussell.zsh-theme $HOME/.oh-my-zsh/themes/
+cp $HOME/.dotfiles.codespaces/zsh/myRobbyRussell.zsh-theme $HOME/.oh-my-zsh/themes/
 
 # Make zsh the default shell
 sudo chsh -s $(which zsh) $USER
@@ -54,10 +54,10 @@ sudo chsh -s $(which zsh) $USER
 # Do the rest of the tasks from workspaces dir
 cd /workspaces
 
-printf "Cloning additional repos: %s\n" "${ADDITIONAL_REPOS}"
+printf "Cloning additional repos: %s\n" "$ADDITIONAL_REPOS"
 
 # Clone remaining repos
-for repo in ${ADDITIONAL_REPOS}; do
+for repo in $ADDITIONAL_REPOS; do
   git clone https://github.com/${repo}.git >> $HOME/clone_${repo}.log 2>&1
 
 # Install neovim
