@@ -1,0 +1,17 @@
+{
+  "folders": [
+          {
+                  "path": "rpcpool"
+          },
+          {
+                  "path": "rpc-haproxy"
+          },
+          {
+                  "path": "Binaries-Ci"
+          },
+          {
+                  "path": "rpc-configurator"
+          }
+  ],
+"settings": {}
+}

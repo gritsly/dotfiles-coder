@@ -55,6 +55,9 @@ curl -L https://github.com/junegunn/fzf/releases/download/${FZF_VERSION}/fzf-${F
 # Do the rest of the tasks from workspaces dir
 cd /workspaces
 
+# Symlink vscode workspaces file
+ln -s $HOME/.dotfiles.codespaces/workspaces/rpcpool.code-workspace rpcpool.code-workspace
+
 # Clone remaining repos
 for repo in $ADDITIONAL_REPOS; do
   printf "Cloning %s\n" $repo
