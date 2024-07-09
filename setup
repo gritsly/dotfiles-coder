@@ -26,6 +26,9 @@ mkdir -p $HOME/bin
 # Make passwordless sudo work
 #export SUDO_ASKPASS=/bin/true
 
+# Install ansible-lint via pip
+pip install ansible-lint
+
 # Install zsh
 sudo apt install -y zsh
 
