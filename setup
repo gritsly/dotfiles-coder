@@ -54,6 +54,8 @@ $HOME/.dotfiles/bin/dotfiles.symlink install
 # Install fzf
 FZF_VERSION=0.55.0
 curl -L https://github.com/junegunn/fzf/releases/download/${FZF_VERSION}/fzf-${FZF_VERSION}-linux_amd64.tar.gz | tar xzC $HOME/bin
+sudo apt install -y fd-find
+sudo ln -s /usr/bin/fdfind ~/.local/bin/fd
 
 # Do the rest of the tasks from workspaces dir
 cd /workspaces
