@@ -29,6 +29,9 @@ mkdir -p $HOME/bin
 # Install ansible-lint via pip
 pip install ansible-lint
 
+# Update apt
+sudo apt update
+
 # Install zsh
 sudo apt install -y zsh
 
