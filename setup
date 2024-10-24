@@ -55,7 +55,9 @@ $HOME/.dotfiles/bin/dotfiles.symlink install
 #sudo chsh -s /usr/bin/fish $USER
 
 # Install fzf
-sudo apt install -y fd-find fzf
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install --all
+sudo apt install -y fd-find
 sudo ln -s /usr/bin/fdfind ~/.local/bin/fd
 
 # Do the rest of the tasks from workspaces dir
