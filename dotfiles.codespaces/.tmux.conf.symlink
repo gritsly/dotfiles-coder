@@ -1,0 +1,61 @@
+# Mouse config
+# This allow to scroll tmux buffer with the wheel
+# Copy selected text if pressing shift while selecting outside tmux
+# Pasting text with shift and click on scroll wheel outside tmux
+set -g mouse on
+
+# Automatically set window title
+set-window-option -g automatic-rename on
+set-option -g set-titles on
+
+# Statusline configs not included in .tmux/airline config
+set -g status on
+set -g status-keys vi
+
+# Set scrolling history limit
+set -g history-limit 10000
+
+# Enable vi mode in tmux, background color and color options
+setw -g mode-keys vi
+setw -g mode-style bg=default
+set -g default-terminal "tmux-256color"
+
+## update the TERM variable of terminal emulator when creating a new session or attaching a existing session
+set -g update-environment 'DISPLAY SSH_ASKPASS SSH_AGENT_PID SSH_CONNECTION WINDOWID XAUTHORITY TERM'
+
+## determine if we should enable 256-colour support
+if "[[ ${TERM} =~ 256color || ${TERM} == fbterm ]]" 'set -g default-terminal screen-256color'
+
+## Setting vim keys to move between panes
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+
+## Setting vim keys to resize panes
+bind-key J resize-pane -D 15
+bind-key K resize-pane -U 15
+bind-key H resize-pane -L 15
+bind-key L resize-pane -R 15
+
+# remap prefix from 'C-b' to 'C-a'
+unbind C-b
+set-option -g prefix C-a
+bind-key C-a send-prefix
+
+# split panes using ( and )
+unbind 9
+unbind 0
+bind 9 split-window -h
+bind 0 split-window -v
+unbind '"'
+unbind %
+
+# switch panes using Alt-arrow without prefix
+bind -n M-Left select-pane -L
+bind -n M-Right select-pane -R
+bind -n M-Up select-pane -U
+bind -n M-Down select-pane -D
+
+# Bind key to sincronize windows -n is used to avoid using prefix when running de command
+bind -n C-s set-window-option synchronize-panes
