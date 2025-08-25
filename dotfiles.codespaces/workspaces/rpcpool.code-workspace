@@ -4,6 +4,9 @@
                   "path": "rpcpool"
           },
           {
+                  "path": "nomad"
+          },
+          {
                   "path": "rpc-haproxy"
           },
           {
