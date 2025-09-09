@@ -53,9 +53,8 @@ else
 fi
 
 # Install fzf
-FZF_VERSION=0.30.0
-echo "Install fzf to version 0.30.0"
-curl -s -L https://github.com/junegunn/fzf/releases/download/${FZF_VERSION}/fzf-${FZF_VERSION}-linux_amd64.tar.gz | tar xzC $HOME/bin
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install --all
 
 PATH=${PATH}:/opt/nvim/bin/
 
