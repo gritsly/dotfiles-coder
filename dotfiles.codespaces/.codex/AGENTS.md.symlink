@@ -37,6 +37,7 @@ Anti-patterns to avoid:
 
 - When work starts repeating, assess whether reusable scaffolding would materially help.
 - Propose a skill for recurring workflows, domain procedures, or repeated investigation patterns.
+- When a skill-assisted workflow fails because access scaffolding is missing, propose a narrowly scoped upgrade to the skill or related workflow instructions.
 - Propose a subagent when the task is noisy, research-heavy, or likely to generate large logs, test output, or intermediate analysis.
 - Propose a hook only for deterministic safety or policy checks that should always run automatically.
 - Prefer one small, high-value addition over broad scaffolding.
@@ -53,8 +54,9 @@ Good reasons to add scaffolding:
 - the instructions would otherwise bloat always-loaded guidance
 
 For cross-tool repos, prefer a shared layout:
-- put shared workflow logic in neutral repo paths such as `.agents/skills/` and `.agents/hooks/`
+- put shared workflow logic in neutral repo paths such as `.agents/skills/`, `.agents/agents/`, and `.agents/hooks/`
 - keep `.claude/` and `.codex/` thin, tool-specific layers for config, discovery, and compatibility
+- prefer wrappers or symlinks in `.claude/` and `.codex/` over copying shared instruction bodies
 - keep shared skill and subagent role names aligned across tools when possible
 - prefer one canonical global `AGENTS.md` file and point tool-specific global files at it
 
@@ -62,6 +64,7 @@ For cross-tool repos, prefer a shared layout:
 
 - Keep always-loaded instructions compact and cross-project.
 - Move reusable workflows into skills instead of growing the global instruction file.
+- Prefer improving existing skills over adding more project-specific always-loaded guidance.
 - Prefer narrow validation targets and explicit stop conditions over broad “make everything pass” workflows.
 - Use subagents only when their output or noise profile justifies the extra context cost.
 - Prefer one proven high-value workflow asset over many speculative ones.
