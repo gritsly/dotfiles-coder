@@ -1,77 +1,65 @@
-# Global Engineering Rules
+# Engineering Rules
 
-## Core Discipline
-
-- State the key assumptions before changing code.
+## Think Before Acting
+- State assumptions explicitly before changing code. If uncertain, ask.
+- If multiple interpretations exist, present them — don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
 - Do not claim correctness you have not verified.
-- Solve the problem you were asked to solve, not adjacent ones.
-- Prefer minimal diffs and do not rewrite unrelated files during scoped work.
-- Remove deprecated or redundant code paths when replacing them unless compatibility is explicitly required.
 
-## Secrets and Destructive Work
+## Simplicity and Scope
+- Solve the problem asked. No adjacent fixes, no speculative features.
+- Minimum code that solves the problem. If 200 lines could be 50, rewrite it.
+- No abstractions for single-use code, no unrequested flexibility or error handling.
+- Ask: "Would a senior engineer call this overcomplicated?" If yes, simplify.
 
-- Confirm before destructive actions.
-- Confirm before any change involving secrets, credentials, or key handling.
+## Surgical Changes
+- Touch only what the task requires. Match existing style.
+- Don't refactor, reformat, or "improve" unrelated code.
+- Remove imports/functions/variables YOUR changes orphaned; leave pre-existing dead code unless asked.
+- Mention unrelated issues you notice — don't silently fix them.
+
+## Goal-Driven Execution
+- Transform tasks into verifiable goals before starting:
+  - "Fix the bug" → write a test that reproduces it, then make it pass
+- For multi-step tasks, state a brief plan: `[Step] → verify: [check]`
+- Strong success criteria let you loop independently. Weak criteria require constant clarification.
+
+## Secrets and Destructive Actions
+- Confirm before destructive actions or any change involving secrets, credentials, or key handling.
 - Never commit or log secrets, API keys, account identifiers, credentials, or PII.
 
-## External Systems and APIs
-
+## External Systems
 - Never assume an API, database, or external service call succeeded.
-- If an external result is ambiguous, verify actual state with another read or fail explicitly.
-- Do not invent a plausible narrative about what probably happened and then act on it as if confirmed.
-- Read the provider documentation before concluding that an endpoint, field, status, or capability does not exist.
+- If a result is ambiguous, verify actual state with another read or fail explicitly.
+- Do not invent a narrative about what probably happened and act on it as confirmed.
+- Read provider documentation before concluding an endpoint or capability doesn't exist.
 
 Anti-patterns to avoid:
 - assuming a failed cancel means an order filled or expired
-- assuming a failed write means the record does not exist
-- treating ambiguous error codes as confirmation of one specific outcome
+- treating ambiguous error codes as one specific outcome
 - swallowing integration failures and continuing as if success is established
 
-## Documentation and Delivery
+## Documentation and Plans
+- Update docs in the same session when behavior or architecture changes.
+- Do not mark roadmap phases complete without explicit user confirmation.
+- Write implementation plans under `.agents/plans/`; create the directory if absent.
+- Plans must be executable and decision-complete: build steps, verification steps, constraints.
 
-- Update documentation in the same session when behavior, architecture, or operator workflow changes.
-- Do not mark roadmap items, phases, or milestones complete without explicit user confirmation.
-- When writing implementation plans or roadmap entries, make them executable and decision-complete: include build steps, verification steps, and constraints.
+## Scaffolding
+Scaffolding means project workflow assets: skills, subagents, and hooks under `.agents/`, plus tool-specific config in `.claude/` and `.codex/`.
 
-## Workflow Scaffolding
-
-- When work starts repeating, assess whether reusable scaffolding would materially help.
-- Propose a skill for recurring workflows, domain procedures, or repeated investigation patterns.
-- When a skill-assisted workflow fails because access scaffolding is missing, propose a narrowly scoped upgrade to the skill or related workflow instructions.
-- Propose a subagent when the task is noisy, research-heavy, or likely to generate large logs, test output, or intermediate analysis.
-- Propose a hook only for deterministic safety or policy checks that should always run automatically.
-- Prefer one small, high-value addition over broad scaffolding.
-- Do not create scaffolding merely because it is absent.
-- Create scaffolding when either:
-  - the user directly asks for it, or
-  - you judge it valuable enough to explicitly propose as part of the current solution
-- If you explicitly propose scaffolding as part of the solution, implement it in the same session unless the user objects.
-
-Good reasons to add scaffolding:
-- the same workflow has appeared more than once
-- the task repeatedly produces noisy output
-- a safety check can be defined deterministically
-- the instructions would otherwise bloat always-loaded guidance
-
-For cross-tool repos, prefer a shared layout:
-- put shared workflow logic in neutral repo paths such as `.agents/skills/`, `.agents/agents/`, and `.agents/hooks/`
-- keep `.claude/` and `.codex/` thin, tool-specific layers for config, discovery, and compatibility
-- prefer wrappers or symlinks in `.claude/` and `.codex/` over copying shared instruction bodies
-- keep shared skill and subagent role names aligned across tools when possible
-- prefer one canonical global `AGENTS.md` file and point tool-specific global files at it
+- Propose scaffolding when you judge it useful — recurring workflows, noisy tasks, deterministic safety checks, or anything that would otherwise bloat always-loaded instructions.
+- Don't create scaffolding silently; propose it and explain the value.
+- If you propose it as part of a solution, implement it in the same session unless the user objects.
+- For cross-tool repos: shared logic in `.agents/skills/`, `.agents/agents/`, `.agents/hooks/`; keep `.claude/` and `.codex/` as thin config layers pointing at shared assets.
 
 ## Context Economy
-
 - Keep always-loaded instructions compact and cross-project.
-- Move reusable workflows into skills instead of growing the global instruction file.
-- Prefer improving existing skills over adding more project-specific always-loaded guidance.
-- Prefer narrow validation targets and explicit stop conditions over broad “make everything pass” workflows.
-- Use subagents only when their output or noise profile justifies the extra context cost.
-- Prefer one proven high-value workflow asset over many speculative ones.
+- Move reusable workflows into skills instead of growing this file.
+- Prefer narrow validation targets and explicit stop conditions over broad "make everything pass" goals.
 
 ## Review Standard
-
-Keep asking:
+Ask before finishing:
 - What assumptions am I making?
 - What would break this?
 - What would a tired maintainer misunderstand?
