@@ -31,51 +31,17 @@ cd $HOME
 # create bindir
 mkdir -p $HOME/bin
 
-# Make passwordless sudo work
-#export SUDO_ASKPASS=/bin/true
-
 # A bit of a hack
 mv .gitconfig .gitconfig.private
 mv .bashrc .bashrc.dist
 mv .zshrc .zshrc.dist
 $HOME/.dotfiles.codespaces/bin/dotfiles.symlink install
 
-# Setting proper terminal
-if [[ -n "$FISH"  ]]; then
-  echo "Setting shell to fish"
-  sudo chsh -s /usr/bin/fish $USER
-elif [[ -n "$ZSH" ]]; then
-  echo "Setting shell to zsh"
-  sudo chsh -s /usr/bin/zsh $USER
-else
-  echo "Setting shell to bash"
-  sudo chsh -s /usr/bin/bash $USER
-fi
+echo "Setting shell to zsh"
+sudo chsh -s /usr/bin/zsh $USER
 
 # Install fzf
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install --all
 
 PATH=${PATH}:/opt/nvim/bin/
-
-# Copy myRubbyRussell.zsh-theme to the themes directory
-cp $HOME/.dotfiles.codespaces/zsh/myRobbyRussell.zsh-theme $HOME/.oh-my-zsh/themes
-
-# Do the rest of the tasks from workspaces dir
-cd /workspaces
-
-# Symlink vscode workspaces file
-ln -s $HOME/.dotfiles.codespaces/workspaces/rpcpool.code-workspace rpcpool.code-workspace
-
-ADDITIONAL_REPOS="\
-rpcpool/rpc-haproxy \
-rpcpool/rpc-configurator \
-rpcpool/Binaries-Ci \
-rpcpool/nomad \
-"
-
-# Clone remaining repos
-for repo in $ADDITIONAL_REPOS; do
-  printf "Cloning %s\n" $repo
-  git clone https://github.com/${repo}.git
-done
