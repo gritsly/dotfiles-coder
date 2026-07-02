@@ -1,5 +1,8 @@
 # User additions loaded by ~/.zshrc after Oh My Zsh starts.
 
+export LANG=C.UTF-8
+unset LC_ADDRESS LC_COLLATE LC_CTYPE LC_IDENTIFICATION LC_MEASUREMENT LC_MESSAGES LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER LC_TELEPHONE LC_TIME
+
 export LTAGS="firewall,reference_firewall,backups_firewall,innernet,users,dns,ns1,sync_epoch_rewards"
 alias run="./run-rd.sh --skip-tags=$LTAGS --diff -l"
 

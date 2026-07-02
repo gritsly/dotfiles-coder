@@ -8,6 +8,7 @@ Keep Coder-maintained defaults for shell, vim, tmux, bash, and git config, while
 - FZF should not use Oh My Zsh's Debian-oriented `fzf` plugin because the image can lack `/usr/share/doc/fzf/examples/*.zsh`.
 - The setup script inserts the zsh user source line after `source $ZSH/oh-my-zsh.sh`, so fzf completion loads after Oh My Zsh initializes completion.
 - Debian installs `fd` as `fdfind`, so setup creates a `~/.local/bin/fd` symlink when needed.
+- The shell should use `C.UTF-8` and clear unsupported inherited `LC_*` category overrides.
 - `Host * / User chris` should live in `~/.ssh/config.user`, included from `~/.ssh/config`, not through a symlink.
 - Claude and Codex should receive the same instruction text in their normal config directories.
 
