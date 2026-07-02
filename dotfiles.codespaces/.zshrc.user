@@ -15,7 +15,7 @@ s() {
 }
 
 # FZF
-export PATH="$HOME/.fzf/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/.fzf/bin:$PATH"
 alias f="fzf"
 export FZF_DEFAULT_COMMAND='fd . / --hidden --exclude ".git" --exclude "/proc" --exclude "/sys" --exclude "/dev" --exclude "/run" --exclude "/tmp" --exclude "/var/tmp" --exclude "/var/cache" --exclude "/var/lib"'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"

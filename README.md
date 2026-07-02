@@ -9,6 +9,7 @@ This repository keeps Coder's default home-directory files in place and applies 
 - `~/.zshrc.user`, sourced from the existing `~/.zshrc` after Oh My Zsh loads
 - `~/.ssh/config.user`, included from the existing `~/.ssh/config`
 - zsh as the login shell
+- `fd`, installed through `fd-find` when needed
 - `fzf`, installed as a binary without modifying shell rc files
 - Claude Code and Codex CLI harnesses
 

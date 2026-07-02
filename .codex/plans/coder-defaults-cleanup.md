@@ -7,6 +7,7 @@ Keep Coder-maintained defaults for shell, vim, tmux, bash, and git config, while
 - Coder creates a usable `~/.zshrc` before this repository's `setup` runs.
 - FZF should not use Oh My Zsh's Debian-oriented `fzf` plugin because the image can lack `/usr/share/doc/fzf/examples/*.zsh`.
 - The setup script inserts the zsh user source line after `source $ZSH/oh-my-zsh.sh`, so fzf completion loads after Oh My Zsh initializes completion.
+- Debian installs `fd` as `fdfind`, so setup creates a `~/.local/bin/fd` symlink when needed.
 - `Host * / User chris` should live in `~/.ssh/config.user`, included from `~/.ssh/config`, not through a symlink.
 - Claude and Codex should receive the same instruction text in their normal config directories.
 
@@ -21,7 +22,7 @@ Keep Coder-maintained defaults for shell, vim, tmux, bash, and git config, while
    - copy `~/.ssh/config.user`
    - append an include line to `~/.ssh/config`
    - set the login shell to zsh
-   - install fzf, Claude Code, and Codex
+   - install fd, fzf, Claude Code, and Codex
 4. Remove tmux, vim, custom theme, Claude settings, ssh symlink, and installer artifacts from the tracked surface.
 5. Update `README.md` with the new behavior.
 

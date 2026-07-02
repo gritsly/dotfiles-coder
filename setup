@@ -7,6 +7,9 @@ fi
 
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 DOTFILES_DIR="$SCRIPT_DIR/dotfiles.codespaces"
+LOCAL_BIN="$HOME/.local/bin"
+
+export PATH="$LOCAL_BIN:$HOME/.fzf/bin:$PATH"
 
 echo >&2 "====================================================================="
 echo >&2 " Setting up coder environment"
@@ -19,6 +22,10 @@ install_agent_instructions() {
     mkdir -p "$HOME/.claude" "$HOME/.codex"
     install -m 0644 "$DOTFILES_DIR/.claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
     install -m 0644 "$DOTFILES_DIR/.codex/AGENTS.md" "$HOME/.codex/AGENTS.md"
+}
+
+setup_local_bin() {
+    mkdir -p "$LOCAL_BIN"
 }
 
 install_zsh_user_config() {
@@ -96,14 +103,36 @@ install_fzf() {
     "$HOME/.fzf/install" --bin
 }
 
+install_fd() {
+    if command -v fd >/dev/null 2>&1; then
+        return
+    fi
+
+    if ! command -v fdfind >/dev/null 2>&1; then
+        if ! command -v apt-get >/dev/null 2>&1; then
+            echo "fd is not installed and apt-get is unavailable" >&2
+            return 1
+        fi
+
+        sudo apt-get update
+        sudo apt-get install -y fd-find
+    fi
+
+    if command -v fdfind >/dev/null 2>&1; then
+        ln -sf "$(command -v fdfind)" "$LOCAL_BIN/fd"
+    fi
+}
+
 install_ai_harnesses() {
     curl -fsSL https://claude.ai/install.sh | bash
     curl -fsSL https://chatgpt.com/codex/install.sh | sh
 }
 
 install_agent_instructions
+setup_local_bin
 install_zsh_user_config
 install_ssh_config
 set_zsh_shell
+install_fd
 install_fzf
 install_ai_harnesses
