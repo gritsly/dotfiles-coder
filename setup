@@ -33,15 +33,21 @@ install_zsh_user_config() {
         return
     fi
 
-    if grep -Fq "$source_line" "$zshrc"; then
-        return
-    fi
-
     tmp=$(mktemp)
     awk -v source_line="$source_line" '
-        !inserted && $0 ~ /^source[[:space:]]+\$ZSH\/oh-my-zsh\.sh$/ {
-            print source_line
-            inserted = 1
+        $0 == source_line {
+            next
+        }
+        $0 == "[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh" {
+            next
+        }
+        $0 ~ /^source[[:space:]]+\$ZSH\/oh-my-zsh\.sh$/ {
+            print
+            if (!inserted) {
+                print source_line
+                inserted = 1
+            }
+            next
         }
         { print }
         END {
@@ -87,7 +93,7 @@ install_fzf() {
         git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf"
     fi
 
-    "$HOME/.fzf/install" --all
+    "$HOME/.fzf/install" --bin
 }
 
 install_ai_harnesses() {

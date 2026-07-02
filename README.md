@@ -6,10 +6,10 @@ This repository keeps Coder's default home-directory files in place and applies 
 
 - `~/.claude/CLAUDE.md`
 - `~/.codex/AGENTS.md`
-- `~/.zshrc.user`, sourced from the existing `~/.zshrc` before Oh My Zsh loads
+- `~/.zshrc.user`, sourced from the existing `~/.zshrc` after Oh My Zsh loads
 - `~/.ssh/config.user`, included from the existing `~/.ssh/config`
 - zsh as the login shell
-- `fzf`
+- `fzf`, installed as a binary without modifying shell rc files
 - Claude Code and Codex CLI harnesses
 
 It does not replace the default `.zshrc`, `.vimrc`, `.tmux.conf`, `.bashrc`, or `.gitconfig`.

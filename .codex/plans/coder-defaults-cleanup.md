@@ -5,7 +5,8 @@ Keep Coder-maintained defaults for shell, vim, tmux, bash, and git config, while
 
 ## Assumptions
 - Coder creates a usable `~/.zshrc` before this repository's `setup` runs.
-- The zsh fzf plugin must be configured before `source $ZSH/oh-my-zsh.sh`, so the setup script inserts the user source line before that line when possible.
+- FZF should not use Oh My Zsh's Debian-oriented `fzf` plugin because the image can lack `/usr/share/doc/fzf/examples/*.zsh`.
+- The setup script inserts the zsh user source line after `source $ZSH/oh-my-zsh.sh`, so fzf completion loads after Oh My Zsh initializes completion.
 - `Host * / User chris` should live in `~/.ssh/config.user`, included from `~/.ssh/config`, not through a symlink.
 - Claude and Codex should receive the same instruction text in their normal config directories.
 
@@ -15,7 +16,8 @@ Keep Coder-maintained defaults for shell, vim, tmux, bash, and git config, while
 3. Update `setup` to:
    - copy `CLAUDE.md` and `AGENTS.md`
    - copy `~/.zshrc.user`
-   - insert the source line into the existing `~/.zshrc`
+   - insert the source line into the existing `~/.zshrc` after Oh My Zsh loads
+   - remove the legacy fzf installer source line from `~/.zshrc`
    - copy `~/.ssh/config.user`
    - append an include line to `~/.ssh/config`
    - set the login shell to zsh
