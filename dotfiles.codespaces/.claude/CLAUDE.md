@@ -2,7 +2,7 @@
 
 ## Think Before Acting
 - State assumptions explicitly before changing code. If uncertain, ask.
-- If multiple interpretations exist, present them — don't pick silently.
+- If multiple interpretations exist, present them - don't pick silently.
 - If a simpler approach exists, say so. Push back when warranted.
 - Do not claim correctness you have not verified.
 
@@ -16,12 +16,12 @@
 - Touch only what the task requires. Match existing style.
 - Don't refactor, reformat, or "improve" unrelated code.
 - Remove imports/functions/variables YOUR changes orphaned; leave pre-existing dead code unless asked.
-- Mention unrelated issues you notice — don't silently fix them.
+- Mention unrelated issues you notice - don't silently fix them.
 
 ## Goal-Driven Execution
 - Transform tasks into verifiable goals before starting:
-  - "Fix the bug" → write a test that reproduces it, then make it pass
-- For multi-step tasks, state a brief plan: `[Step] → verify: [check]`
+  - "Fix the bug" -> write a test that reproduces it, then make it pass.
+- For multi-step tasks, state a brief plan: `[Step] -> verify: [check]`.
 - Strong success criteria let you loop independently. Weak criteria require constant clarification.
 
 ## Secrets and Destructive Actions
@@ -42,16 +42,18 @@ Anti-patterns to avoid:
 ## Documentation and Plans
 - Update docs in the same session when behavior or architecture changes.
 - Do not mark roadmap phases complete without explicit user confirmation.
-- Write implementation plans under `.agents/plans/`; create the directory if absent.
+- Write implementation plans under `.codex/plans/`; create the directory if absent. If Claude also needs access, keep `.claude/plans` as a symlink to `.codex/plans`.
 - Plans must be executable and decision-complete: build steps, verification steps, constraints.
 
 ## Scaffolding
-Scaffolding means project workflow assets: skills, subagents, and hooks under `.agents/`, plus tool-specific config in `.claude/` and `.codex/`.
+Scaffolding means project workflow assets: skills, subagents, hooks, and plans under `.codex/`, plus tool compatibility symlinks/config in `.claude/` and `.agents/`.
 
-- Propose scaffolding when you judge it useful — recurring workflows, noisy tasks, deterministic safety checks, or anything that would otherwise bloat always-loaded instructions.
+- Propose scaffolding when you judge it useful - recurring workflows, noisy tasks, deterministic safety checks, or anything that would otherwise bloat always-loaded instructions.
 - Don't create scaffolding silently; propose it and explain the value.
 - If you propose it as part of a solution, implement it in the same session unless the user objects.
-- For cross-tool repos: shared logic in `.agents/skills/`, `.agents/agents/`, `.agents/hooks/`; keep `.claude/` and `.codex/` as thin config layers pointing at shared assets.
+- For cross-tool repos: keep shared logic in `.codex/skills/`, `.codex/agents/`, `.codex/hooks/`, and `.codex/plans/`; use symlinks such as `.claude/*` and `.agents/skills` only as tool compatibility layers.
+- Zed discovers project skills only from `.agents/skills`; prefer `.agents/skills -> ../.codex/skills` over duplicate skill files.
+- First-time checks: Codex sees `.codex` config/skills/hooks, Claude sees symlinked skills/agents/hooks, and Zed sees skills after trusting the worktree.
 
 ## Context Economy
 - Keep always-loaded instructions compact and cross-project.

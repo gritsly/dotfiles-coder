@@ -1,0 +1,22 @@
+# User additions loaded by ~/.zshrc before Oh My Zsh starts.
+
+export LTAGS="firewall,reference_firewall,backups_firewall,innernet,users,dns,ns1,sync_epoch_rewards"
+alias run="./run-rd.sh --skip-tags=$LTAGS --diff -l"
+
+alias p="ping"
+pp() {
+    ping -D "$1.nodes.rpcpool.com"
+}
+pi() {
+    ping -D "$1.rpcpool.wg"
+}
+s() {
+    tailscale ssh chris@"$1" -o SendEnv=NOMAD_TOKEN
+}
+
+# FZF
+alias f="fzf"
+export FZF_DEFAULT_COMMAND='fd . / --hidden --exclude ".git" --exclude "/proc" --exclude "/sys" --exclude "/dev" --exclude "/run" --exclude "/tmp" --exclude "/var/tmp" --exclude "/var/cache" --exclude "/var/lib"'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+plugins=(git fzf)
