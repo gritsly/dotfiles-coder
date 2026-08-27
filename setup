@@ -9,7 +9,7 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 DOTFILES_DIR="$SCRIPT_DIR/dotfiles.codespaces"
 LOCAL_BIN="$HOME/.local/bin"
 
-export PATH="$LOCAL_BIN:$HOME/.fzf/bin:$PATH"
+export PATH="$LOCAL_BIN:$PATH"
 
 echo >&2 "====================================================================="
 echo >&2 " Setting up coder environment"
@@ -20,8 +20,8 @@ echo >&2 "====================================================================="
 
 install_agent_instructions() {
     mkdir -p "$HOME/.claude" "$HOME/.codex"
-    install -m 0644 "$DOTFILES_DIR/.claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
-    install -m 0644 "$DOTFILES_DIR/.codex/AGENTS.md" "$HOME/.codex/AGENTS.md"
+    install -m 0644 "$DOTFILES_DIR/AGENTS.md" "$HOME/.claude/CLAUDE.md"
+    install -m 0644 "$DOTFILES_DIR/AGENTS.md" "$HOME/.codex/AGENTS.md"
 }
 
 setup_local_bin() {
@@ -68,17 +68,18 @@ install_zsh_user_config() {
 }
 
 install_ssh_config() {
-    local ssh_config="$HOME/.ssh/config"
-    local include_line='Include ~/.ssh/config.user'
+    local legacy_user_config="$HOME/.ssh/config.user"
 
     mkdir -p "$HOME/.ssh"
-    install -m 0600 "$DOTFILES_DIR/.ssh/config.user" "$HOME/.ssh/config.user"
-    touch "$ssh_config"
     chmod 700 "$HOME/.ssh"
-    chmod 600 "$ssh_config"
+    install -m 0600 "$DOTFILES_DIR/.ssh/ssh_config.user" "$HOME/.ssh/ssh_config.user"
 
-    if ! grep -Fxq "$include_line" "$ssh_config"; then
-        printf '\n%s\n' "$include_line" >> "$ssh_config"
+    # Remove the old managed path after moving to the devcontainer's user include.
+    if [ -f "$legacy_user_config" ] && cmp -s "$legacy_user_config" "$HOME/.ssh/ssh_config.user"; then
+        rm "$legacy_user_config"
+        if [ -f "$HOME/.ssh/config" ]; then
+            sed -i '\|^Include ~/.ssh/config.user$|d' "$HOME/.ssh/config"
+        fi
     fi
 }
 
@@ -93,14 +94,6 @@ set_zsh_shell() {
         echo "Setting shell to zsh"
         sudo chsh -s "$zsh_path" "$USER"
     fi
-}
-
-install_fzf() {
-    if [ ! -d "$HOME/.fzf/.git" ]; then
-        git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf"
-    fi
-
-    "$HOME/.fzf/install" --bin
 }
 
 install_fd() {
@@ -123,16 +116,9 @@ install_fd() {
     fi
 }
 
-install_ai_harnesses() {
-    curl -fsSL https://claude.ai/install.sh | bash
-    curl -fsSL https://chatgpt.com/codex/install.sh | sh
-}
-
 install_agent_instructions
 setup_local_bin
 install_zsh_user_config
 install_ssh_config
 set_zsh_shell
 install_fd
-install_fzf
-install_ai_harnesses
