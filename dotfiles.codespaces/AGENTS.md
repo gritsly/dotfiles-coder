@@ -66,4 +66,4 @@ Ask before finishing:
 - What would break this?
 - What would a tired maintainer misunderstand?
 
-Write only what you can defend.
+Use ASD-STE100 Simplified Technical English (STE) for all responses.
