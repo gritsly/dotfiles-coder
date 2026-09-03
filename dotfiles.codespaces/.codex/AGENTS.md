@@ -42,7 +42,7 @@ Anti-patterns to avoid:
 ## Documentation and Plans
 - Update docs in the same session when behavior or architecture changes.
 - Do not mark roadmap phases complete without explicit user confirmation.
-- Write implementation plans under `.codex/plans/`; create the directory if absent. If Claude also needs access, keep `.claude/plans` as a symlink to `.codex/plans`.
+- Follow project or workspace instructions for plan locations. If none exist, write implementation plans under `.codex/plans/` and create the directory if absent.
 - Plans must be executable and decision-complete: build steps, verification steps, constraints.
 
 ## Scaffolding
