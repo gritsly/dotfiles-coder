@@ -8,6 +8,8 @@ fi
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 DOTFILES_DIR="$SCRIPT_DIR/dotfiles.codespaces"
 LOCAL_BIN="$HOME/.local/bin"
+CODEX_CONFIG_DIR="${CODEX_HOME:-$HOME/.codex}"
+CLAUDE_CONFIG_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 
 export PATH="$LOCAL_BIN:$PATH"
 
@@ -19,9 +21,11 @@ echo >&2 " HOME        $HOME"
 echo >&2 "====================================================================="
 
 install_agent_instructions() {
-    mkdir -p "$HOME/.claude" "$HOME/.codex"
-    install -m 0644 "$DOTFILES_DIR/AGENTS.md" "$HOME/.claude/CLAUDE.md"
-    install -m 0644 "$DOTFILES_DIR/AGENTS.md" "$HOME/.codex/AGENTS.md"
+    local instructions="$DOTFILES_DIR/.codex/AGENTS.md"
+
+    mkdir -p "$CLAUDE_CONFIG_DIR" "$CODEX_CONFIG_DIR"
+    install -m 0644 "$instructions" "$CLAUDE_CONFIG_DIR/CLAUDE.md"
+    install -m 0644 "$instructions" "$CODEX_CONFIG_DIR/AGENTS.md"
 }
 
 setup_local_bin() {
