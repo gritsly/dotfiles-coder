@@ -1,5 +1,9 @@
 # Engineering Rules
 
+## Workspace Rules
+- When `/workspaces/AGENTS.md` exists, read and follow it in addition to these personal rules.
+- Treat workspace and repository instructions as higher priority when rules differ.
+
 ## Think Before Acting
 - State assumptions explicitly before changing code. If uncertain, ask.
 - If multiple interpretations exist, present them - don't pick silently.

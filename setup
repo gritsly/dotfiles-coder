@@ -21,11 +21,11 @@ echo >&2 " HOME        $HOME"
 echo >&2 "====================================================================="
 
 install_agent_instructions() {
-    local instructions="$DOTFILES_DIR/.codex/AGENTS.md"
+    local instructions="$DOTFILES_DIR/.codex/AGENTS.override.md"
 
     mkdir -p "$CLAUDE_CONFIG_DIR" "$CODEX_CONFIG_DIR"
     install -m 0644 "$instructions" "$CLAUDE_CONFIG_DIR/CLAUDE.md"
-    install -m 0644 "$instructions" "$CODEX_CONFIG_DIR/AGENTS.md"
+    install -m 0644 "$instructions" "$CODEX_CONFIG_DIR/AGENTS.override.md"
 }
 
 setup_local_bin() {
