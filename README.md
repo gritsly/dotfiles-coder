@@ -15,4 +15,4 @@ This repository keeps Coder's default home-directory files in place and applies 
 
 It does not replace the default `.zshrc`, `.vimrc`, `.tmux.conf`, `.bashrc`, or `.gitconfig`.
 
-The shared agent instruction source is `dotfiles.codespaces/.codex/AGENTS.override.md`. Codex loads it as personal global guidance while the company-managed `/workspaces/AGENTS.md` remains workspace guidance. The installer copies the same source to Claude's `CLAUDE.md` path.
+The portable agent instruction source is `dotfiles.codespaces/AGENTS.md`. The installer writes it as Codex's `AGENTS.override.md` so it can coexist with a managed `AGENTS.md`, and copies the same source to Claude's `CLAUDE.md` path.

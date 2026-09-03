@@ -1,8 +1,8 @@
 # Engineering Rules
 
-## Workspace Rules
-- When `/workspaces/AGENTS.md` exists, read and follow it in addition to these personal rules.
-- Treat workspace and repository instructions as higher priority when rules differ.
+## Worktrees
+- Always prefix worktree folder names with the repository name, for example `example_my-branch`.
+- This requirement overrides broader workspace examples that use only the branch name.
 
 ## Think Before Acting
 - State assumptions explicitly before changing code. If uncertain, ask.
@@ -58,7 +58,6 @@ Scaffolding means project workflow assets: skills, subagents, hooks, and plans u
 - For cross-tool repos: keep shared logic in `.codex/skills/`, `.codex/agents/`, `.codex/hooks/`, and `.codex/plans/`; use symlinks such as `.claude/*` and `.agents/skills` only as tool compatibility layers.
 - Zed discovers project skills only from `.agents/skills`; prefer `.agents/skills -> ../.codex/skills` over duplicate skill files.
 - First-time checks: Codex sees `.codex` config/skills/hooks, Claude sees symlinked skills/agents/hooks, and Zed sees skills after trusting the worktree.
-- When creating worktrees always prepend the folder name with the repo's name like `example_my-branch`
 
 ## Context Economy
 - Keep always-loaded instructions compact and cross-project.
