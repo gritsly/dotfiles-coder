@@ -87,42 +87,7 @@ install_ssh_config() {
     fi
 }
 
-set_zsh_shell() {
-    local zsh_path
-    local current_shell
-
-    zsh_path=$(command -v zsh)
-    current_shell=$(getent passwd "$USER" | awk -F: '{print $7}')
-
-    if [ "$current_shell" != "$zsh_path" ]; then
-        echo "Setting shell to zsh"
-        sudo chsh -s "$zsh_path" "$USER"
-    fi
-}
-
-install_fd() {
-    if command -v fd >/dev/null 2>&1; then
-        return
-    fi
-
-    if ! command -v fdfind >/dev/null 2>&1; then
-        if ! command -v apt-get >/dev/null 2>&1; then
-            echo "fd is not installed and apt-get is unavailable" >&2
-            return 1
-        fi
-
-        sudo apt-get update
-        sudo apt-get install -y fd-find
-    fi
-
-    if command -v fdfind >/dev/null 2>&1; then
-        ln -sf "$(command -v fdfind)" "$LOCAL_BIN/fd"
-    fi
-}
-
 install_agent_instructions
 setup_local_bin
 install_zsh_user_config
 install_ssh_config
-set_zsh_shell
-install_fd
