@@ -8,6 +8,8 @@ fi
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 DOTFILES_DIR="$SCRIPT_DIR/dotfiles.codespaces"
 LOCAL_BIN="$HOME/.local/bin"
+# Coder runs setup outside a login shell, so load the devcontainer's config dirs.
+[ -r /etc/profile.d/config-dirs.sh ] && . /etc/profile.d/config-dirs.sh
 CODEX_CONFIG_DIR="${CODEX_HOME:-$HOME/.codex}"
 CLAUDE_CONFIG_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 

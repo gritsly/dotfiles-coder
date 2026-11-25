@@ -1,7 +1,7 @@
 # Engineering Rules
 
 ## Worktrees
-- Create worktrees under `~/orca/workspaces/<repository>/<name>`, where `<name>` is the last part of the branch name. Use Orca when it is available; use the same path without Orca. This rule overrides other workspace examples.
+- Create worktrees with Orca when it is available. Without Orca, create the worktree in the folder that Orca uses for worktrees on this machine. Do not assume a fixed path; it differs between machines. This rule overrides other workspace examples.
 
 ## Think Before Acting
 - State material assumptions before changing code. If uncertain, ask.
