@@ -1,15 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-initialize_orca_workspace_instance() {
-    if [ ! -f /tmp/orca-instance-initialized ]; then
-        rm -f /workspaces/.orca/orcad.lock
-        touch /tmp/orca-instance-initialized
-    fi
-}
-
-initialize_orca_workspace_instance
-
 if [ -z "${USER:-}" ]; then
     USER=$(id -un)
 fi
@@ -28,6 +19,13 @@ echo >&2 ""
 echo >&2 " USER        $USER"
 echo >&2 " HOME        $HOME"
 echo >&2 "====================================================================="
+
+initialize_orca_workspace_instance() {
+    if [ ! -f /tmp/orca-instance-initialized ]; then
+        rm -f /workspaces/.orca/orcad.lock
+        touch /tmp/orca-instance-initialized
+    fi
+}
 
 install_agent_instructions() {
     local instructions="$DOTFILES_DIR/AGENTS.md"
@@ -121,6 +119,7 @@ install_ssh_config() {
     fi
 }
 
+initialize_orca_workspace_instance
 install_agent_instructions
 setup_local_bin
 install_git_identity
