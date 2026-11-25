@@ -5,7 +5,7 @@ This repository keeps Coder's default home-directory files in place and applies 
 `setup` installs:
 
 - `${CLAUDE_CONFIG_DIR:-~/.claude}/CLAUDE.md`
-- `${CODEX_HOME:-~/.codex}/AGENTS.dotfiles.md`
+- `${CODEX_HOME:-~/.codex}/AGENTS.override.md`, holding the personal rules followed by the team rules from `~/AGENTS.md`
 - the global git `user.name`, and `user.email` from `DOTFILES_GIT_EMAIL` or else from the Claude Code login
 - the `hal` skill in `${CLAUDE_CONFIG_DIR:-~/.claude}/skills/hal`
 - `~/.zshrc.user`, sourced from the existing `~/.zshrc` after Oh My Zsh loads
@@ -21,4 +21,4 @@ It does not replace the default `.zshrc`, `.vimrc`, `.tmux.conf`, `.bashrc`, or 
 
 The `hal` skill coordinates Orca workers: Claude coordinates and does the work first, Codex reviews and takes work when Claude is off, and starts follow live quotas. See `dotfiles.codespaces/skills/hal/README.md`. Tests: `python3 -m unittest tests/test_hal.py`.
 
-The portable agent instruction source is `dotfiles.codespaces/AGENTS.md`. The installer copies it to Claude's `CLAUDE.md` path and to Codex's `AGENTS.dotfiles.md`. On each shell start the devcontainer builds Codex's global `AGENTS.md` from `AGENTS.dotfiles.md` followed by the team rules. `setup` removes an old `AGENTS.override.md`, because it would hide the team rules.
+The portable agent instruction source is `dotfiles.codespaces/AGENTS.md`. The installer copies it to Claude's `CLAUDE.md` path. Claude then loads the team rules from a parent folder's `CLAUDE.md` and the repo rules after it. Codex reads only one global file, and `AGENTS.override.md` replaces the team `AGENTS.md` that the devcontainer links there. The installer therefore writes the personal rules followed by the team rules from `~/AGENTS.md` into the override, once per run. Codex then loads personal, team and repo rules in that order. Without `~/AGENTS.md`, the override holds the personal rules only.

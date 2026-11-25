@@ -34,9 +34,13 @@ install_agent_instructions() {
 
     mkdir -p "$CLAUDE_CONFIG_DIR" "$CODEX_CONFIG_DIR"
     install -m 0644 "$instructions" "$CLAUDE_CONFIG_DIR/CLAUDE.md"
-    # The devcontainer puts this file before the team rules in $CODEX_HOME/AGENTS.md.
-    install -m 0644 "$instructions" "$CODEX_CONFIG_DIR/AGENTS.dotfiles.md"
-    rm -f "$CODEX_CONFIG_DIR/AGENTS.override.md"
+    # Codex reads one global file, and the override hides the image's team AGENTS.md link.
+    # So write personal rules, then the team rules baked into the image at $HOME/AGENTS.md.
+    {
+        cat "$instructions"
+        if [ -r "$HOME/AGENTS.md" ]; then echo; cat "$HOME/AGENTS.md"; fi
+    } > "$CODEX_CONFIG_DIR/AGENTS.override.md"
+    chmod 0644 "$CODEX_CONFIG_DIR/AGENTS.override.md"
 }
 
 setup_local_bin() {
