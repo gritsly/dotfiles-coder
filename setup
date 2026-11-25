@@ -32,6 +32,31 @@ setup_local_bin() {
     mkdir -p "$LOCAL_BIN"
 }
 
+install_git_identity() {
+    local email="${DOTFILES_GIT_EMAIL:-}"
+
+    git config --global user.name gritsly
+    # Fall back to the email of the Claude Code login, which lives outside this public repository.
+    if [ -z "$email" ] && [ -r "$CLAUDE_CONFIG_DIR/.claude.json" ]; then
+        email=$(python3 -c 'import json, sys; print(json.load(open(sys.argv[1]))["oauthAccount"]["emailAddress"])' \
+            "$CLAUDE_CONFIG_DIR/.claude.json" 2>/dev/null || true)
+    fi
+    if [ -n "$email" ]; then
+        git config --global user.email "$email"
+    else
+        echo >&2 "git user.email not set: export DOTFILES_GIT_EMAIL or log in to Claude Code, then rerun setup"
+    fi
+}
+
+install_hal_skill() {
+    local skill_dir="$CLAUDE_CONFIG_DIR/skills/hal"
+
+    mkdir -p "$CLAUDE_CONFIG_DIR/skills"
+    rm -rf "$skill_dir"
+    cp -R "$DOTFILES_DIR/skills/hal" "$skill_dir"
+    chmod 0755 "$skill_dir/scripts/hal.py"
+}
+
 install_zsh_user_config() {
     local source_line='[ -r "$HOME/.zshrc.user" ] && source "$HOME/.zshrc.user"'
     local zshrc="$HOME/.zshrc"
@@ -89,5 +114,7 @@ install_ssh_config() {
 
 install_agent_instructions
 setup_local_bin
+install_git_identity
+install_hal_skill
 install_zsh_user_config
 install_ssh_config
