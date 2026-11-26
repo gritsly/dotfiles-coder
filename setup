@@ -22,6 +22,16 @@ echo >&2 " USER        $USER"
 echo >&2 " HOME        $HOME"
 echo >&2 "====================================================================="
 
+link_codex_home() {
+    local link="$HOME/.codex"
+
+    # Orca detects the system default Codex account at ~/.codex only.
+    [ "$CODEX_CONFIG_DIR" = "$link" ] && return
+    [ "$(readlink "$link" 2>/dev/null)" = "$CODEX_CONFIG_DIR" ] && return
+    rm -rf "$link"
+    ln -s "$CODEX_CONFIG_DIR" "$link"
+}
+
 initialize_orca_workspace_instance() {
     if [ ! -f /tmp/orca-instance-initialized ]; then
         rm -f /workspaces/.orca/orcad.lock
@@ -127,6 +137,7 @@ install_ssh_config() {
     fi
 }
 
+link_codex_home
 initialize_orca_workspace_instance
 install_agent_instructions
 setup_local_bin
