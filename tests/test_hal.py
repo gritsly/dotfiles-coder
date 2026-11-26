@@ -84,19 +84,29 @@ class RushTest(unittest.TestCase):
 class RoutingTest(unittest.TestCase):
     def test_claude_first_then_codex_even_in_rush(self):
         self.assertEqual(hal.candidates('implement', 'normal', False, None, None),
-                         [('claude', hal.OPUS, 'medium'), ('codex', hal.SOL, 'medium')])
+                         [('claude', hal.OPUS, 'high'), ('codex', hal.SOL, 'high')])
         self.assertEqual(hal.candidates('research', 'small', False, 'codex', None),
-                         [('codex', hal.SOL, 'medium'), ('claude', hal.SONNET, 'high')])
+                         [('codex', hal.SOL, 'medium'), ('claude', hal.OPUS, 'medium')])
+        self.assertEqual(hal.candidates('implement', 'complex', False, None, None),
+                         [('claude', hal.FABLE, 'medium'), ('codex', hal.SOL, 'xhigh')])
 
-    def test_plan_uses_fable_or_mythos(self):
-        self.assertEqual(hal.candidates('plan', 'normal', False, None, None)[0], ('claude', hal.FABLE, 'medium'))
-        self.assertEqual(hal.candidates('plan', 'complex', True, None, None),
-                         [('claude', hal.MYTHOS, 'high'), ('codex', hal.ASTRA, 'medium')])
+    def test_plan_runs_one_step_above_work(self):
+        plans = {size: hal.candidates('plan', size, False, None, None) for size in ('small', 'normal', 'complex')}
+        self.assertEqual(plans['small'], [('claude', hal.OPUS, 'high'), ('codex', hal.SOL, 'high')])
+        self.assertEqual(plans['normal'], [('claude', hal.FABLE, 'medium'), ('codex', hal.SOL, 'xhigh')])
+        self.assertEqual(plans['complex'], [('claude', hal.FABLE, 'high'), ('codex', hal.ASTRA, 'medium')])
+
+    def test_security_uses_mythos_in_place_of_fable(self):
+        work = [hal.candidates('implement', size, True, None, None)[0][1:] for size in ('small', 'normal', 'complex')]
+        self.assertEqual(work, [(hal.OPUS, 'medium'), (hal.OPUS, 'high'), (hal.MYTHOS, 'medium')])
+        plan = [hal.candidates('plan', size, True, None, None)[0][1:] for size in ('small', 'normal', 'complex')]
+        self.assertEqual(plan, [(hal.OPUS, 'high'), (hal.MYTHOS, 'medium'), (hal.MYTHOS, 'high')])
+        self.assertEqual(hal.candidates('plan', 'complex', True, None, None)[1], ('codex', hal.ASTRA, 'medium'))
 
     def test_codex_reviewer_matches_strength(self):
         cases = {'claude-sonnet-5-5:high': (hal.SOL, 'medium'), 'claude-opus-5-5:medium': (hal.SOL, 'medium'),
                  'claude-opus-5-5:high': (hal.SOL, 'high'), 'claude-opus-5-5:max': (hal.SOL, 'high'),
-                 'claude-fable-5-2:low': (hal.SOL, 'high'), 'claude-fable-5-2:medium': (hal.ASTRA, 'medium'),
+                 'claude-fable-5-2:low': (hal.SOL, 'high'), 'claude-fable-5-2:medium': (hal.SOL, 'xhigh'),
                  'claude-fable-5-2:high': (hal.ASTRA, 'medium'), 'claude-mythos-5-2:high': (hal.ASTRA, 'medium')}
         for review_of, peer in cases.items():
             routes = hal.candidates('review', 'normal', False, None, review_of)
@@ -106,8 +116,10 @@ class RoutingTest(unittest.TestCase):
     def test_claude_reviews_codex_work(self):
         self.assertEqual(hal.candidates('review', 'normal', False, None, 'gpt-6.2-sol:high')[0],
                          ('claude', hal.OPUS, 'high'))
-        self.assertEqual(hal.candidates('review', 'normal', False, None, 'gpt-6.2-astra:medium')[0],
+        self.assertEqual(hal.candidates('review', 'normal', False, None, 'gpt-6.2-sol:xhigh')[0],
                          ('claude', hal.FABLE, 'medium'))
+        self.assertEqual(hal.candidates('review', 'normal', False, None, 'gpt-6.2-astra:medium')[0],
+                         ('claude', hal.FABLE, 'high'))
 
     def test_launch_options(self):
         self.assertEqual(hal.launch_options('claude', hal.OPUS, 'medium', []),

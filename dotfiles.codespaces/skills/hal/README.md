@@ -59,11 +59,12 @@ Claude model for work:
 
 | Role | Small | Normal | Complex |
 | --- | --- | --- | --- |
-| Plan | Fable, medium | Fable, medium | Fable, high |
-| Plan with `--security` | Mythos, medium | Mythos, medium | Mythos, high |
-| Implement, research | Sonnet, high | Opus, medium | Opus, high |
+| Plan | Opus, high | Fable, medium | Fable, high |
+| Plan with `--security` | Opus, high | Mythos, medium | Mythos, high |
+| Implement, research | Opus, medium | Opus, high | Fable, medium |
+| Implement, research with `--security` | Opus, medium | Opus, high | Mythos, medium |
 
-Opus is the default worker. Sonnet and Opus cover security in their tasks. Fable plans a big project, and Mythos plans one where security hardening is necessary or is the main idea.
+Opus is the default worker, and Fable takes complex work. A plan runs one step above work of the same size. Pass `--security` when security hardening is necessary or is the main idea of the task; Mythos then takes the place of Fable.
 
 A Codex model of similar strength reviews Claude work, or takes the work when Claude is off:
 
@@ -71,9 +72,10 @@ A Codex model of similar strength reviews Claude work, or takes the work when Cl
 | --- | --- |
 | Up to Opus medium | Sol, medium |
 | Above Opus medium, below Fable medium | Sol, high |
-| Fable medium and above, Mythos | Astra, medium |
+| Fable medium | Sol, xhigh |
+| Fable high and above, Mythos | Astra, medium |
 
-Astra stops at medium effort, because higher effort uses the Codex limits too quickly. A Claude review of Codex work uses Opus medium for Sol up to medium, Opus high for Sol high and above, and Fable medium for Astra. The fallback reviewer in the same family uses the implementer's model and effort in a fresh session.
+Astra stops at medium effort, because higher effort uses the Codex limits too quickly. A Claude review of Codex work uses Opus medium for Sol up to medium, Opus high for Sol high, Fable medium for Sol xhigh and above, and Fable high for Astra. The fallback reviewer in the same family uses the implementer's model and effort in a fresh session.
 
 The first output line of a start gives `--review-of MODEL:EFFORT` for the review.
 

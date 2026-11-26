@@ -17,6 +17,12 @@ s() {
     tailscale ssh chris@"$1" -o SendEnv=NOMAD_TOKEN
 }
 
+# Run git with the personal gh login in place of the Coder GitHub App token, for repos outside the app.
+gitme() {
+    git -c credential.https://github.com.helper= \
+        -c 'credential.https://github.com.helper=!/usr/bin/gh auth git-credential' "$@"
+}
+
 # FZF
 alias f="fzf"
 export FZF_DEFAULT_COMMAND='fd . / --hidden --exclude ".git" --exclude "/proc" --exclude "/sys" --exclude "/dev" --exclude "/run" --exclude "/tmp" --exclude "/var/tmp" --exclude "/var/cache" --exclude "/var/lib"'
