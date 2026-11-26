@@ -35,7 +35,8 @@ SONNET, OPUS, FABLE, MYTHOS = 'claude-sonnet-5-5', 'claude-opus-5-5', 'claude-fa
 SOL, ASTRA = 'gpt-6.2-sol', 'gpt-6.2-astra'
 CLAUDE_RANK = {SONNET: 0, OPUS: 1, FABLE: 2, MYTHOS: 3}
 EFFORTS = {'low': 0, 'medium': 1, 'high': 2, 'xhigh': 3, 'max': 4, 'ultra': 5}
-WORK_MODELS = {'small': (SONNET, 'high'), 'normal': (OPUS, 'medium'), 'complex': (OPUS, 'high')}
+WORK_MODELS = {'small': (OPUS, 'medium'), 'normal': (OPUS, 'high'), 'complex': (FABLE, 'medium')}
+PLAN_MODELS = {'small': (OPUS, 'high'), 'normal': (FABLE, 'medium'), 'complex': (FABLE, 'high')}
 ROUTES = ['claude', 'codex']
 ORCA = os.environ.get('ORCA_CLI_COMMAND') or 'orca'
 CLAUDE_API = os.environ.get('HAL_CLAUDE_API') or 'https://api.anthropic.com'
@@ -248,21 +249,24 @@ def codex_peer(model, effort):
         return SOL, 'medium'
     if level(model, effort) < level(FABLE, 'medium'):
         return SOL, 'high'
+    if level(model, effort) < level(FABLE, 'high'):
+        return SOL, 'xhigh'
     return ASTRA, 'medium'
 
 
 def claude_peer(model, effort):
     """Claude model of similar strength for Codex work."""
     if 'astra' in model:
+        return FABLE, 'high'
+    if EFFORTS.get(effort, 1) >= EFFORTS['xhigh']:
         return FABLE, 'medium'
     return OPUS, 'high' if EFFORTS.get(effort, 1) >= EFFORTS['high'] else 'medium'
 
 
 def work_model(role, size, security):
-    """Fable plans; Mythos plans security work; Opus is the default worker; Sonnet takes small tasks."""
-    if role == 'plan':
-        return MYTHOS if security else FABLE, 'high' if size == 'complex' else 'medium'
-    return WORK_MODELS[size]
+    """Plans run one step above work of the same size; security work uses Mythos in place of Fable."""
+    model, effort = (PLAN_MODELS if role == 'plan' else WORK_MODELS)[size]
+    return MYTHOS if security and model == FABLE else model, effort
 
 
 def candidates(role, size, security, prefer, review_of):
@@ -297,8 +301,8 @@ def start(args, given):
         sys.exit('hal: the router chooses the agent; remove --agent or --terminal')
     if args.role == 'review' and not args.review_of:
         sys.exit('hal: a review needs --review-of MODEL:EFFORT from the implementer\'s first output line')
-    if args.security and args.role != 'plan':
-        sys.exit('hal: --security applies to --role plan; Sonnet and Opus cover security in other tasks')
+    if args.security and args.role == 'review':
+        sys.exit('hal: --security does not apply to a review; --review-of sets the model')
     routes = candidates(args.role, args.size, args.security, args.prefer, args.review_of)
     if args.route:
         routes = [r for r in routes if r[0] == args.route]

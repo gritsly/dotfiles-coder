@@ -17,8 +17,9 @@ Run the coordinator on Claude Opus with medium effort.
 HAL start --role plan|implement|research|review [--size small|normal|complex] [--security] [--prefer claude|codex] [--review-of MODEL:EFFORT] -- --spec-file <file> --worktree current [other worker-start options]
 ```
 
-- `plan`: the first step of a big project that needs a lot of research and planning. Fable writes the plan to `plan.md` in the plan folder that the workspace instructions name: tasks with scope, size, dependencies, and acceptance checks. Add `--security` when security hardening is necessary or is the main idea of the project; HAL then uses Mythos. Review the plan, then start workers on its tasks.
-- `implement` and `research`: Opus, or Sonnet for `small`. They cover security in these tasks, so do not pass `--security`.
+- `plan`: the first step of a big project that needs a lot of research and planning. HAL picks a model one step above work of the same size. The planner writes the plan to `plan.md` in the plan folder that the workspace instructions name: tasks with scope, size, dependencies, and acceptance checks. Review the plan, then start workers on its tasks.
+- `implement` and `research`: Opus, or Fable for `complex`.
+- `--security`: add it to `plan`, `implement`, or `research` when security hardening is necessary or is the main idea of the task. Mythos then takes the place of Fable.
 - Claude goes first. Codex takes the task when Claude is off, for example when Claude's 5-hour use is above 80 %. Claude reviews can run up to 90 %; the rest is for you.
 - `review`: `--review-of` takes `MODEL:EFFORT` from the implementer's first output line. The router picks a model of similar strength in the other family first.
 - `--size`: `small` for simple or mechanical work, `complex` for hard design or debugging.
